@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>මුදල් එකතු කිරීම</title>
+  <style>
+    body {
+      font-family: "Noto Sans Sinhala", sans-serif;
+      max-width: 500px;
+      margin: 30px auto;
+      padding: 20px;
+      border: 2px solid #4CAF50;
+      border-radius: 10px;
+      background: #f9f9f9;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h2 {
+      text-align: center;
+      color: #2e7d32;
+      margin-bottom: 20px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 10px;
+      text-align: center;
+      font-size: 16px;
+    }
+    th {
+      background: #dcedc8;
+    }
+    input[type="number"] {
+      width: 100%;
+      padding: 8px;
+      text-align: center;
+      font-size: 16px;
+      border: 1px solid #aaa;
+      border-radius: 5px;
+      outline: none;
+      transition: 0.3s;
+    }
+    input[type="number"]:focus {
+      border-color: #4CAF50;
+      box-shadow: 0 0 5px rgba(76,175,80,0.5);
+    }
+    .result {
+      margin-top: 25px;
+      text-align: center;
+      font-size: 22px;
+      font-weight: bold;
+      color: #1b5e20;
+      background: #e8f5e9;
+      padding: 15px;
+      border-radius: 8px;
+    }
+    footer {
+      text-align: center;
+      margin-top: 30px;
+      font-size: 13px;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>මුදල් එකතු කිරීම</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th>නෝට්ටුව</th>
+        <th>ගණන</th>
+        <th>එකතුව (රු)</th>
+      </tr>
+    </thead>
+    <tbody id="moneyTable"></tbody>
+  </table>
+
+  <div class="result" id="grandTotal">මුළු එකතුව: රු. 0.00</div>
+
+  <footer>© 2025 මුදල් ගණනය කිරීම | Developed by shavee</footer>
+
+  <script>
+    // note denominations
+    const denominations = [20, 50, 100, 500, 1000, 5000];
+    const tableBody = document.getElementById("moneyTable");
+
+    // create rows dynamically
+    denominations.forEach(value => {
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td>රු. ${value}</td>
+        <td><input type="number" id="note${value}" min="0" value="0" inputmode="numeric"></td>
+        <td id="total${value}">0</td>
+      `;
+      tableBody.appendChild(row);
+    });
+
+    // calculate total
+    function calculateTotal() {
+      let grandTotal = 0;
+      denominations.forEach(v => {
+        const input = document.getElementById('note' + v);
+        const count = parseInt(input.value) || 0;
+        const subtotal = count * v;
+        grandTotal += subtotal;
+        document.getElementById('total' + v).innerText = subtotal.toLocaleString('si-LK');
+      });
+      document.getElementById('grandTotal').innerText = "මුළු එකතුව: රු. " + grandTotal.toLocaleString('si-LK');
+    }
+
+    // attach input listeners automatically
+    tableBody.addEventListener('input', e => {
+      if (e.target && e.target.type === 'number') calculateTotal();
+    });
+  </script>
+
+</body>
+</html>
